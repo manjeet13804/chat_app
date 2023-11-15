@@ -1,6 +1,6 @@
-#Hosted Link
+# Hosted Link  https://chatapp-cn.netlify.app/
 
-# Todo List
+# Chat App
 
 This is a simple chat app application built using React. It allows users to login, register , send messages , receive messages from users.
 
@@ -51,10 +51,6 @@ The following dependencies are used in this project:
 -   uuid: ^9.0.0,
 
 You can find the complete list of dependencies with their versions in the `package.json` file.
-
-## API
-
-The application uses the JSONPlaceholder API to fetch and update tasks. The API endpoint used is: https://jsonplaceholder.typicode.com/todos
 
 
 ## Contributing
