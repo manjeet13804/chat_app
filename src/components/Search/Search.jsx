@@ -10,8 +10,10 @@ import {
   serverTimestamp,
   getDoc,
 } from "firebase/firestore";
-import { db } from "../firebase";
-import { AuthContext } from "../context/AuthContext";
+import { db } from "../../config/firebase";
+import AuthContext from "../../context/AuthContext/AuthContext";
+import styles from "./Search.module.css";
+
 const Search = () => {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
@@ -40,19 +42,19 @@ const Search = () => {
   };
 
   const handleSelect = async () => {
-    // check whether the group(chats in firestore) exists, if not create
+    //check whether the chats in firestore exists, if not create
     const combinedId =
       currentUser.uid > user.uid
         ? currentUser.uid + user.uid
         : user.uid + currentUser.uid;
-
     try {
-      const response = await getDoc(doc(db, "chats", combinedId));
-      if (!response.exists()) {
-        // create a chat in chats collection
+      const res = await getDoc(doc(db, "chats", combinedId));
+
+      if (!res.exists()) {
+        //create a chat in chats collection
         await setDoc(doc(db, "chats", combinedId), { messages: [] });
 
-        //create user chats,
+        //create user chats
         await updateDoc(doc(db, "userChats", currentUser.uid), {
           [combinedId + ".userInfo"]: {
             uid: user.uid,
@@ -71,27 +73,29 @@ const Search = () => {
           [combinedId + ".date"]: serverTimestamp(),
         });
       }
-    } catch (error) {}
+    } catch (err) {}
+
     setUser(null);
     setUsername("");
   };
 
   return (
-    <div className="search">
-      <div className="searchForm">
+    <div className={styles.search}>
+      <div className={styles.searchForm}>
         <input
           type="text"
-          placeholder="Find a user"
+          placeholder="Find a user or chat with testuser"
           onKeyDown={handleKey}
           onChange={(e) => setUsername(e.target.value)}
           value={username}
         />
+        <span onClick={handleSearch}>🔍</span>
       </div>
       {err && <span>User not found!</span>}
       {user && (
-        <div className="userChat" onClick={handleSelect}>
+        <div className={styles.userChat} onClick={handleSelect}>
           <img src={user.photoURL} alt="" />
-          <div className="userChatInfo">
+          <div className={styles.userChatInfo}>
             <span>{user.displayName}</span>
           </div>
         </div>
